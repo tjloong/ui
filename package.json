@@ -1,0 +1,19 @@
+{
+  "name": "@jiannius/ui",
+  "version": "1.0.0",
+  "description": "Vue UI components",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TJ",
+  "license": "MIT",
+  "dependencies": {
+    "@popperjs/core": "^2.9.3",
+    "boxicons": "^2.0.9",
+    "chart.js": "^3.5.1",
+    "lodash": "^4.17.19",
+    "moment": "^2.29.1",
+    "flatpickr": "^4.6.9"
+  }
+}
