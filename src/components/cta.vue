@@ -2,7 +2,7 @@
     <div :class="['w-10/12 mx-auto flex flex-col justify-center items-center', small ? 'my-8' : 'my-12']">
         <div :class="small ? 'w-20' : 'w-40'">
             <slot name="img">
-                <img src="../assets/icons/empty.svg" v-if="type === 'search'">
+                <empty-svg v-if="type === 'empty'" class="w-full h-full" />
             </slot>
         </div>
 
@@ -20,12 +20,14 @@
 </template>
 
 <script>
+import EmptySvg from './svg/empty-svg.vue'
+
 export default {
     name: 'Cta',
     props: {
         type: {
             type: String,
-            default: 'search',
+            default: 'empty',
         },
         title: {
             type: String,
@@ -39,6 +41,9 @@ export default {
             type: Boolean,
             default: false,
         }
+    },
+    components: {
+        EmptySvg,
     }
 }
 </script>

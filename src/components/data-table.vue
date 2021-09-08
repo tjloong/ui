@@ -397,16 +397,15 @@ export default {
             return computed
         },
         getTableCellClass (field) {
-            if (field.align) return `text-${field.align}`
+            if (field.align === 'center') return 'text-center'
+            if (field.align === 'right') return 'text-right'
             if (field.isImage) return 'w-20'
             if (field.actions) return 'w-10'
             if (field.status) return 'w-20'
         },
         getTableHeaderClass (field) {
-            const style = 'flex items-center'
-
-            if (field.align === 'center') return `${style} justify-center`
-            if (field.align === 'right') return `${style} justify-end`
+            if (field.align === 'center') return `flex items-center justify-center`
+            if (field.align === 'right') return `flex items-center justify-end`
         },
         getStatus (field, row) {
             const status = field.status(row)
