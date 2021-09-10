@@ -34,6 +34,12 @@
                 </select>
             </template>
 
+            <template v-if="caption">
+                <div class="mt-1 text-xs font-medium">
+                    {{ caption }}
+                </div>
+            </template>
+
             <template v-if="error">
                 <div class="mt-1 text-red-500 font-medium text-xs">
                     {{ error }}
@@ -49,10 +55,12 @@ import Datepicker from './datepicker'
 export default {
     name: 'Field',
     props: {
+        rows: String,
         label: String,
         error: String,
         config: Object,
         options: Array,
+        caption: String,
         required: Boolean,
         placeholder: String,
         type: {

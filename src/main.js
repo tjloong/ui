@@ -1,4 +1,5 @@
 import Alert from './plugins/alert.js'
+import Device from './plugins/device.js'
 
 import Box from './components/box.vue'
 import Btn from './components/btn.vue'
@@ -11,13 +12,16 @@ import Modal from './components/modal.vue'
 import Toggler from './components/toggler.vue'
 import Checkbox from './components/checkbox.vue'
 import Dropdown from './components/dropdown.vue'
+import FileCard from './components/file/card.vue'
 import Daterange from './components/daterange.vue'
 import DataTable from './components/data-table.vue'
 import Datepicker from './components/datepicker.vue'
 import AdminPanel from './components/admin-panel/layout.vue'
 import PageHeader from './components/page-header.vue'
 import AsyncPicker from './components/async-picker.vue'
+import FileUploader from './components/file/uploader.vue'
 import OptionsChecker from './components/options-checker.vue'
+
 
 import Nl2br from './filters/nl2br.js'
 import Gender from './filters/gender.js'
@@ -33,6 +37,7 @@ import DateFormat from './filters/date-format.js'
 export default {
     install (Vue, options = {}) {
         Vue.use(Alert)
+        Vue.use(Device)
 
         Vue.component('box', Box)
         Vue.component('btn', Btn)
@@ -46,12 +51,15 @@ export default {
         Vue.component('checkbox', Checkbox)
         Vue.component('dropdown', Dropdown)
         Vue.component('daterange', Daterange)
+        Vue.component('file-card', FileCard)
         Vue.component('data-table', DataTable)
         Vue.component('datepicker', Datepicker)
         Vue.component('admin-panel', AdminPanel)
         Vue.component('page-header', PageHeader)
         Vue.component('async-picker', AsyncPicker)
+        Vue.component('file-uploader', FileUploader)
         Vue.component('options-checker', OptionsChecker)
+
 
         Vue.filter('nl2br', Nl2br)
         Vue.filter('gender', Gender)

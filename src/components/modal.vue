@@ -28,9 +28,9 @@
                                 </slot>
                             </div>
 
-                            <a class="text-xl" @click="close()">
+                            <button type="button" class="text-xl" @click="close()">
                                 <icon name="x" size="md" />
-                            </a>
+                            </button>
                         </div>
 
                         <div class="p-6">

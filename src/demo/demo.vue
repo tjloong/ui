@@ -1,6 +1,21 @@
 <template>
     <div class="bg-gray-50 min-h-screen py-10 px-4">
         <div class="max-w-screen-lg mx-auto">
+            <section-title>File Uploader</section-title>
+            <div class="mb-4">
+                <btn @click="$refs.uploader.open()">
+                    Upload
+                </btn>
+
+                <file-uploader ref="uploader" />
+            </div>
+
+            <section-title>File Card</section-title>
+            <div class="grid gap-4 md:grid-cols-4 mb-4">
+                <file-card :file="{ id: 1, name: 'File 1', url: 'https://via.placeholder.com/500', mime: 'image/jpg', type: 'jpg' }" @edit="$toast('Edit')" />
+                <file-card :file="{ id: 2, name: 'File 2', url: 'https://via.placeholder.com/500', mime: 'application/pdf', type: 'pdf' }" />
+            </div>
+
             <section-title>Box</section-title>
             <box>
                 <div class="p-5">

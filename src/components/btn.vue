@@ -55,35 +55,64 @@ export default {
         inverted: Boolean,
         loading: Boolean,
         disabled: Boolean,
+        color: {
+            type: String,
+            default: 'theme',
+        },
         size: {
             type: String,
             default: 'sm',
         },
     },
     computed: {
-        style () {
-            const sizes = {
-                'xs': this.icon ? 'text-xs pl-1 pr-0.5 py-1' : 'text-xs py-1 px-2',
-                'sm': this.icon ? 'text-sm pl-1 pr-0.5 py-1' : 'text-sm py-1.5 px-4',
-                'md': this.icon ? 'text-base pl-1 pr-0.5 py-1' : 'text-base py-1.5 px-4',
-                'lg': this.icon ? 'text-lg pl-1 pr-0.5 py-1' : 'text-lg py-2 px-5',
+        collections () {
+            return {
+                colors: {
+                    'white': 'bg-white text-gray-800',
+                    'green': 'bg-green-500 text-white',
+                    'red': 'bg-red-500 text-white',
+                    'yellow': 'bg-yellow-500 text-white',
+                    'theme': 'bg-theme text-white',
+                },
+                inverted: {
+                    'white': 'text-gray-500 hover:bg-gray-500',
+                    'green': 'text-green-500 hover:bg-green-100',
+                    'red': 'text-red-500 hover:bg-red-100',
+                    'yellow': 'text-yellow-500 hover:bg-yellow-100',
+                    'theme': 'text-theme hover:bg-theme-light',
+                },
+                outlined: {
+                    'white': 'border-gray-400 text-gray-500',
+                    'green': 'border-green-500 text-green-500',
+                    'red': 'border-red-500 text-red-500',
+                    'yellow': 'border-yellow-500 text-yellow-500',
+                    'theme': 'border-theme text-theme',
+                },
+                sizes: {
+                    'xs': this.icon ? 'text-xs pl-1 pr-0.5 py-1' : 'text-xs py-1 px-2',
+                    'sm': this.icon ? 'text-sm pl-1 pr-0.5 py-1' : 'text-sm py-1.5 px-4',
+                    'md': this.icon ? 'text-base pl-1 pr-0.5 py-1' : 'text-base py-1.5 px-4',
+                    'lg': this.icon ? 'text-lg pl-1 pr-0.5 py-1' : 'text-lg py-2 px-5',
+                },
             }
+        },
+        style () {
 
             let style = [
                 'inline-flex items-center justify-center rounded-md font-medium',
                 this.disabled && 'opacity-80',
-                sizes[this.size],
+                this.collections.sizes[this.size],
             ]
 
             if (this.outlined) {
                 style.push('bg-white border-2 shadow hover:shadow-md')
-                style.push(this.color === 'white' ? 'border-gray-400 text-gray-500' : `text-theme border-theme`)
+                style.push(this.collections.outlined[this.color])
             }
             else if (this.inverted) {
-                style.push(this.color === 'white' ? 'text-gray-500 hover:bg-gray-500' : `text-theme hover:bg-theme-light`)
+                style.push(this.collections.inverted[this.color])
             }
             else {
-                style.push(this.color === 'white' ? 'bg-white text-gray-800' : `bg-theme text-white`)
+                style.push(this.collections.colors[this.color])
             }
 
             return style
