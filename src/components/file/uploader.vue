@@ -1,5 +1,5 @@
 <template>
-    <modal ref="modal" title="Upload File" size="2xl" @close="tab = null">
+    <modal ref="modal" :title="title" size="2xl" @close="tab = null">
         <div v-if="form && form.processing" class="h-32 flex items-center justify-center">
             <div class="py-2 px-4 bg-gray-900 opacity-80 rounded-md text-white relative overflow-hidden">
                 <div v-if="form.progress" class="absolute inset-0 bg-green-500" :style="{ width: `${form.progress.percentage}%` }" />
@@ -7,8 +7,18 @@
                 <div class="flex items-center relative">
                     <icon name="radio-circle" size="md" class="mr-1.5" animation="burst" />
                     <div class="font-medium">
-                        {{ tab === 'device' ? 'Uploading' : 'Saving' }}
-                        <span v-if="form.progress">{{ form.progress.percentage }}%</span>
+                        <template v-if="tab === 'device' && form.progress && form.progress.percentage >= 100">
+                            Processing...
+                        </template>
+
+                        <template v-else-if="tab === 'device'">
+                            Uploading
+                            <span v-if="form.progress">{{ form.progress.percentage }}%</span>
+                        </template>
+
+                        <template v-else>
+                            Saving...
+                        </template>
                     </div>
                 </div>
             </div>
@@ -33,12 +43,15 @@
 
             <url-form v-else-if="tab === 'urls'" :multiple="multiple" @submit="submit" />
             <youtube-form v-else-if="tab === 'youtube'" :multiple="multiple" @submit="submit" />
+            <library v-else-if="tab === 'library'" :multiple="multiple" @submit="select" />
+            <library v-else-if="tab === 'library-image'" :multiple="multiple" @submit="select" image-only />
         </template>
     </modal>
 </template>
 
 <script>
 import Tabs from '../tabs.vue'
+import Library from './library.vue'
 import UrlForm from './url-form.vue'
 import Dropzone from './dropzone.vue'
 import YoutubeForm from './youtube-form.vue'
@@ -47,6 +60,7 @@ export default {
     name: 'FileUploader',
     props: {
         url: String,
+        title: String,
         payload: Object,
         multiple: Boolean,
         accept: {
@@ -64,6 +78,7 @@ export default {
     },
     components: {
         Tabs,
+        Library,
         UrlForm,
         Dropzone,
         YoutubeForm,
@@ -102,7 +117,9 @@ export default {
             }
 
             if (this.accept.includes('youtube')) tabs.push({ value: 'youtube', label: 'Youtube' })
+
             if (this.accept.includes('library')) tabs.push({ value: 'library', label: 'Library' })
+            else if (this.accept.includes('library-image')) tabs.push({ value: 'library-image', label: 'Library' })
 
             return tabs
         },
@@ -125,6 +142,10 @@ export default {
                 },
             })
         },
+        select (files) {
+            this.$emit('select', files)
+            this.close()
+        }
     }
 }
 </script>

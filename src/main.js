@@ -16,6 +16,7 @@ import FileCard from './components/file/card.vue'
 import Daterange from './components/daterange.vue'
 import DataTable from './components/data-table.vue'
 import Datepicker from './components/datepicker.vue'
+import Pagination from './components/pagination.vue'
 import AdminPanel from './components/admin-panel/layout.vue'
 import PageHeader from './components/page-header.vue'
 import AsyncPicker from './components/async-picker.vue'
@@ -54,6 +55,7 @@ export default {
         Vue.component('file-card', FileCard)
         Vue.component('data-table', DataTable)
         Vue.component('datepicker', Datepicker)
+        Vue.component('pagination', Pagination)
         Vue.component('admin-panel', AdminPanel)
         Vue.component('page-header', PageHeader)
         Vue.component('async-picker', AsyncPicker)

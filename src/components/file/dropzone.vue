@@ -116,8 +116,7 @@ export default {
 
             this.state.reading = false
 
-            if (this.multiple) this.$emit('input', { files: this.files })
-            else this.$emit('input', { file: this.files[0] })
+            this.$emit('input', { files: this.files })
         },
     }
 }

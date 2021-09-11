@@ -1,6 +1,6 @@
 <template>
     <div v-if="small" class="w-full pt-[100%] bg-gray-200 relative rounded-md shadow overflow-hidden">
-        <div class="absolute inset-0 flex items-center justify-center cursor-pointer" @click="checked = !checked">
+        <div class="absolute inset-0 flex items-center justify-center cursor-pointer" @click="$emit('click')">
             <template v-if="file.mime === 'youtube'">
                 <img v-if="file.data && file.data.vid" :src="`https://img.youtube.com/vi/${file.data.vid}/default.jpg`" class="w-full h-full object-cover">
                 <div class="absolute inset-0 flex items-center justify-center">
@@ -13,17 +13,17 @@
             <img v-else-if="file.mime.startsWith('image/')" :src="file.url" class="w-full h-full object-contain">
             <icon v-else-if="file.type === 'pdf'" name="file-pdf" type="solid" size="64px" />
             <icon v-else name="file" type="solid" size="64px" />
+
+            <div v-if="checked" class="absolute inset-0 bg-gray-800 opacity-60" />
         </div>
 
-        <div v-if="checked" class="absolute inset-0 bg-gray-800 opacity-60" />
-
         <div class="absolute top-0 left-0 m-1.5">
-            <checkbox v-model="checked" />
+            <checkbox :value="checked" />
         </div>
 
         <div class="absolute bottom-0 left-0 right-0 px-2 pb-2 pt-4 text-white bg-gradient-to-t from-black to-transparent opacity-80 overflow-hidden">
             <div class="flex flex-wrap">
-                <div class="flex-grow self-center mr-1.5 whitespace-nowrap overflow-hidden overflow-ellipsis">
+                <div class="flex-grow self-center mr-1.5 whitespace-nowrap overflow-hidden overflow-ellipsis text-xs">
                     {{ file.name }}
                 </div>
 
@@ -37,7 +37,7 @@
     </div>
 
     <div v-else class="bg-white rounded-md shadow overflow-hidden">
-        <div class="w-full pt-[100%] bg-gray-200 relative cursor-pointer" @click="checked = !checked">
+        <div class="w-full pt-[100%] bg-gray-200 relative cursor-pointer" @click="$emit('click')">
             <div class="absolute inset-0 flex items-center justify-center">
                 <template v-if="file.mime === 'youtube'">
                     <img v-if="file.data && file.data.vid" :src="`https://img.youtube.com/vi/${file.data.vid}/default.jpg`" class="w-full h-full object-cover">
@@ -56,7 +56,7 @@
             <div v-if="checked" class="absolute inset-0 bg-gray-800 opacity-60" />
 
             <div class="absolute top-0 left-0 m-1.5">
-                <checkbox v-model="checked" />
+                <checkbox :value="checked" />
             </div>
         </div>
 
@@ -74,7 +74,7 @@
             <div class="text-xs">
                 <span v-if="file.type">{{ file.type }}</span>
                 <span v-if="file.size">/ {{ file.size }}MB</span>
-                <span v-if="file.dimension">/ {{ file.dimension }}</span>
+                <span v-if="file.data && file.data.dimension">/ {{ file.data.dimension }}</span>
             </div>
 
             <div v-if="file.owner" class="text-xs text-gray-500">
@@ -90,16 +90,7 @@ export default {
     props: {
         file: Object,
         small: Boolean,
-    },
-    data () {
-        return {
-            checked: false,
-        }
-    },
-    watch: {
-        checked (checked) {
-            this.$emit('checked', checked)
-        },
+        checked: Boolean,
     },
 }
 </script>

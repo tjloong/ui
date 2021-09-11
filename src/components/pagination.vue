@@ -14,7 +14,7 @@
                 v-for="(val, i) in links"
                 :key="`${val.label}-${i}`"
                 :class="[
-                    '-ml-px my-0.5 text-sm border border-gray-300 flex items-center justify-center hover:bg-gray-100',
+                    '-ml-px my-0.5 text-sm border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-100',
                     i === 0 && 'rounded-l-md',
                     i === links.length - 1 && 'rounded-r-md',
                     val.label !== '...' && 'cursor-pointer',
