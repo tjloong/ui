@@ -8,53 +8,43 @@
             <input 
                 type="text"
                 ref="input"
-                v-model="form.search"
+                v-model="text"
                 placeholder="Search"
                 class="w-full pl-10 form-input pr-10"
                 @input="search()"
             >
 
             <a 
-                v-if="form.search !== null"
+                v-if="text !== null"
                 class="absolute top-0 right-0 bottom-0 w-10 flex items-center justify-center" 
-                @click="form.search = null; fetch()" 
+                @click="text = null; fetch()" 
             >
                 <icon name="x" />
             </a>
         </div>
 
         <div class="-mx-6">
-            <template v-if="options && options.data.length">
+            <template v-if="options.length">
                 <a
-                    v-for="opt in options.data"
+                    v-for="opt in options"
                     :key="opt.id"
                     class="block py-2 px-6 border-b text-sm hover:bg-gray-100"
                     @click="select(opt)"
                 >
                     <slot name="option" :option="opt">
-                        {{ opt.hasOwnProperty('name') ? opt.name : opt }}
+                        {{ opt.prototype.hasOwnProperty('name') ? opt.name : opt }}
                     </slot>
                 </a>
             </template>
 
-            <div v-if="form.processing" class="flex items-center justify-center">
-                <div class="h-8 w-8">
-                    <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        fill="none" 
-                        viewBox="0 0 24 24"
-                        class="animate-spin text-theme"
-                    >
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </div>
+            <div v-if="form.processing" class="flex items-center justify-center text-theme">
+                <icon name="radio-circle" size="32px" animation="burst" />
             </div>
 
-            <cta v-else-if="options && !options.data.length" small />
+            <cta v-else-if="!options.length" small />
 
             <div v-else-if="paginate" class="px-4 pt-4 text-center">
-                <btn inverted @click="form.page++">
+                <btn inverted @click="page++; fetch()">
                     Load more <icon name="down-arrow-alt" />
                 </btn>
             </div>
@@ -70,6 +60,7 @@ export default {
     name: 'AsyncPicker',
     props: {
         url: String,
+        payload: Object,
         placeholder: String,
     },
     components: {
@@ -77,11 +68,11 @@ export default {
     },
     data () {
         return {
-            options: null,
-            form: this.$inertia.form({
-                search: null,
-                page: 1,
-            }),
+            page: 1,
+            form: {},
+            text: null,
+            options: [],
+            results: null,
         }
     },
     computed: {
@@ -115,10 +106,19 @@ export default {
             this.close()
         },
         fetch () {
+            this.form = this.$inertia.form({
+                search: this.text || null,
+                page: this.page,
+                ...this.payload,
+            })
+
             this.form.post(this.url, {
                 onSuccess: () => {
-                    this.options = this.$page.props.options
-                },
+                    this.results = this.$page.props.options
+                    this.options = this.page === 1
+                        ? this.results.data
+                        : this.options.concat(this.results.data)
+                }
             })
         }
     }
