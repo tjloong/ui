@@ -73,7 +73,7 @@
 
             <div class="text-xs">
                 <span v-if="file.type">{{ file.type }}</span>
-                <span v-if="file.size">/ {{ file.size }}MB</span>
+                <span v-if="file.size">/ {{ file.size }}</span>
                 <span v-if="file.data && file.data.dimension">/ {{ file.data.dimension }}</span>
             </div>
 

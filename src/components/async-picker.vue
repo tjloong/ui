@@ -1,22 +1,20 @@
 <template>
     <modal ref="modal" :title="title">
-        <div class="relative w-full mb-4">
-            <div class="absolute top-0 left-0 bottom-0 w-10 flex items-center justify-center">
-                <icon name="search" class="text-gray-500" />
-            </div>
+        <div class="bg-gray-200 rounded py-1.5 px-2 flex items-center mb-4">
+            <icon name="search" class="text-gray-500" size="18px" />
 
             <input 
                 type="text"
                 ref="input"
                 v-model="text"
                 placeholder="Search"
-                class="w-full pl-10 form-input pr-10"
+                class="flex-grow w-full appearance-none text-sm p-0 border-0 bg-transparent"
                 @input="search()"
             >
 
             <a 
                 v-if="text !== null"
-                class="absolute top-0 right-0 bottom-0 w-10 flex items-center justify-center" 
+                class="px-2 flex items-center justify-center" 
                 @click="text = null; fetch()" 
             >
                 <icon name="x" />
