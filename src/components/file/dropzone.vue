@@ -111,6 +111,8 @@ export default {
                 if (/\.(php5?|html?|jsx?)$/i.test(file.name)) return
                 if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(file.name)) return
 
+                file.blob = URL.createObjectURL(file)
+
                 this.files.push(file)
             })
 

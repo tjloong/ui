@@ -43,8 +43,8 @@
 
             <url-form v-else-if="tab === 'urls'" :multiple="multiple" @submit="submit" />
             <youtube-form v-else-if="tab === 'youtube'" :multiple="multiple" @submit="submit" />
-            <library v-else-if="tab === 'library'" :multiple="multiple" @submit="select" />
-            <library v-else-if="tab === 'library-image'" :multiple="multiple" @submit="select" image-only />
+            <library v-else-if="tab === 'library'" :multiple="multiple" @submit="submit" />
+            <library v-else-if="tab === 'library-image'" :multiple="multiple" @submit="submit" image-only />
         </template>
     </modal>
 </template>
@@ -133,19 +133,21 @@ export default {
             this.$refs.modal.close()
         },
         submit (data) {
-            this.form = this.$inertia.form({ upload: data })
-
-            this.form.post(this.url, {
-                onSuccess: () => {
-                    this.$emit('completed')
-                    this.close()
-                },
-            })
+            if (data.library) {
+                this.$emit('completed', this.multiple ? data.library : data.library[0])
+                this.close()
+            }
+            else {
+                this.form = this.$inertia.form({ upload: data })
+                this.form.post(this.url, {
+                    onSuccess: () => {
+                        const result = this.$page.props.options
+                        this.$emit('completed', this.multiple ? result : result[0])
+                        this.close()
+                    },
+                })
+            }
         },
-        select (files) {
-            this.$emit('select', files)
-            this.close()
-        }
     }
 }
 </script>

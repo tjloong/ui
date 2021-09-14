@@ -109,7 +109,7 @@ export default {
 
             this.$inertia
                 .form(filters)
-                .post(this.route('file.list'), {
+                .post(this.route('settings-file.list'), {
                     onSuccess: () => {
                         this.results = this.$page.props.options
                         this.options = this.page === 1 
@@ -120,7 +120,7 @@ export default {
                 })
         },
         submit () {
-            this.$emit('submit', this.checked)
+            this.$emit('submit', { library: this.checked })
         }
     }
 }

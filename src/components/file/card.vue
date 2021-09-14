@@ -14,12 +14,13 @@
             <icon v-else-if="file.type === 'pdf'" name="file-pdf" type="solid" size="64px" />
             <icon v-else name="file" type="solid" size="64px" />
 
-            <div v-if="checked" class="absolute inset-0 bg-gray-800 opacity-60" />
+            <div class="absolute top-0 left-0 m-1.5">
+                <checkbox :value="checked" />
+            </div>
+
+            <div :class="['absolute inset-0 bg-gray-800', checked ? 'opacity-60' : 'opacity-0']" />
         </div>
 
-        <div class="absolute top-0 left-0 m-1.5">
-            <checkbox :value="checked" />
-        </div>
 
         <div class="absolute bottom-0 left-0 right-0 px-2 pb-2 pt-4 text-white bg-gradient-to-t from-black to-transparent opacity-80 overflow-hidden">
             <div class="flex flex-wrap">
@@ -53,11 +54,11 @@
                 <icon v-else name="file" type="solid" size="64px" />
             </div>
 
-            <div v-if="checked" class="absolute inset-0 bg-gray-800 opacity-60" />
-
             <div class="absolute top-0 left-0 m-1.5">
                 <checkbox :value="checked" />
             </div>
+
+            <div :class="['absolute inset-0 bg-gray-800', checked ? 'opacity-60' : 'opacity-0']" />
         </div>
 
         <div class="py-3 px-4 border">
