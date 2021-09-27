@@ -109,9 +109,9 @@ export default {
 
             this.$inertia
                 .form(filters)
-                .post(this.route('settings-file.list'), {
+                .post(this.route('file.list'), {
                     onSuccess: () => {
-                        this.results = this.$page.props.options
+                        this.results = this.$page.props.session
                         this.options = this.page === 1 
                             ? this.results.data 
                             : this.options.concat(this.results.data)

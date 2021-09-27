@@ -10,7 +10,7 @@
             ]"
             @click="select(opt)"
         >
-            <icon v-if="isSelected(opt)" name="check" class="mr-1 flex-shrink-0" />
+            <icon v-if="isSelected(opt)" name="check" class="flex-shrink-0" />
             <div class="flex-grow self-center">
                 {{ opt.label }}
             </div>
@@ -75,8 +75,8 @@ export default {
             this.$emit('change', opt)
         },
         getSize () {
-            if (this.size === 'xs') return 'py-1 px-4 text-xs'
-            else return 'py-1 px-4 text-sm'
+            if (this.size === 'xs') return 'py-1 px-2 text-xs'
+            else return 'py-1 px-2 text-sm'
         }
     }
 }

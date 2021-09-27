@@ -12,6 +12,7 @@ import Modal from './components/modal.vue'
 import Toggler from './components/toggler.vue'
 import Checkbox from './components/checkbox.vue'
 import Dropdown from './components/dropdown.vue'
+import SideMenu from './components/side-menu.vue'
 import FileCard from './components/file/card.vue'
 import Daterange from './components/daterange.vue'
 import DataTable from './components/data-table.vue'
@@ -35,6 +36,8 @@ import Titlecase from './filters/titlecase.js'
 import DateRange from './filters/date-range.js'
 import DateFormat from './filters/date-format.js'
 
+import Tooltip from './directives/tooltip.js'
+
 export default {
     install (Vue, options = {}) {
         Vue.use(Alert)
@@ -51,6 +54,7 @@ export default {
         Vue.component('toggler', Toggler)
         Vue.component('checkbox', Checkbox)
         Vue.component('dropdown', Dropdown)
+        Vue.component('side-menu', SideMenu)
         Vue.component('daterange', Daterange)
         Vue.component('file-card', FileCard)
         Vue.component('data-table', DataTable)
@@ -73,6 +77,8 @@ export default {
         Vue.filter('titlecase', Titlecase)
         Vue.filter('dateRange', DateRange)
         Vue.filter('dateFormat', DateFormat)
+
+        Vue.directive('tooltip', Tooltip)
 
         Vue.mixin({
             computed: {

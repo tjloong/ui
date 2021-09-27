@@ -90,10 +90,7 @@ import Dropdown from './dropdown'
 export default {
     name: 'Tabs',
     props: {
-        value: {
-            type: String,
-            default: null
-        },
+        value: [String, Number],
         tabs: {
             type: Array,
             default () {

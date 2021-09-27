@@ -26,20 +26,57 @@
                 <datepicker :value="value" :config="config" @input="$emit('input', $event)" />
             </template>
 
-            <template v-if="['select', 'currency'].includes(type)">
+            <template v-if="['select', 'select-country', 'select-state', 'select-currency'].includes(type)">
                 <select class="w-full form-input" :value="value" :placeholder="placeholder" @input="$emit('input', $event.target.value)">
                     <template v-if="type === 'select'">
+                        <option v-if="placeholder" :value="null">-- {{ placeholder }} --</option>
                         <option v-for="opt in options" :key="opt.value" :value="opt.value">
                             {{ opt.label }}
                         </option>
                     </template>
 
-                    <template v-else-if="type === 'currency'">
+                    <template v-else-if="type === 'select-currency'">
+                        <option :value="null">-- Select Currency --</option>
                         <option v-for="opt in currencies" :key="opt.value" :value="opt.value">
                             {{ opt.label }}
                         </option>
                     </template>
+
+                    <template v-else-if="type === 'select-state'">
+                        <option :value="null">-- Select State --</option>
+                        <option v-for="opt in states" :key="opt" :value="opt">
+                            {{ opt }}
+                        </option>
+                    </template>
+
+                    <template v-else-if="type === 'select-country'">
+                        <option :value="null">-- Select Country --</option>
+                        <option v-for="opt in countries" :key="opt" :value="opt">
+                            {{ opt }}
+                        </option>
+                    </template>
                 </select>
+            </template>
+
+            <template v-if="type === 'checker'">
+                <options-checker :value="value" :options="options" @input="$emit('input', $event)" />
+            </template>
+
+            <template v-if="type === 'color-picker'">
+                <color-picker :value="value" @input="$emit('input', $event)" />
+            </template>
+
+            <template v-if="type === 'percentage'">
+                <div class="relative w-60">
+                    <input type="number" class="w-full form-input" v-bind="$props" step="any" min="0" @input="$emit('input', $event.target.value)" style="padding-right: 1.5rem;">
+                    <div class="absolute top-0 bottom-0 right-0 px-3 flex items-center justify-center">
+                        %
+                    </div>
+                </div>
+            </template>
+
+            <template v-if="type === 'currency'">
+                <currency-input :currency="currency" v-bind="$props" @input="$emit('input', $event)" />
             </template>
         </slot>
 
@@ -54,7 +91,9 @@
 </template>
 
 <script>
-import Datepicker from './datepicker'
+import Datepicker from './datepicker.vue'
+import ColorPicker from './color-picker.vue'
+import CurrencyInput from './currency-input.vue'
 
 export default {
     name: 'Field',
@@ -68,6 +107,7 @@ export default {
         config: Object,
         options: Array,
         caption: String,
+        currency: String,
         required: Boolean,
         placeholder: String,
         type: {
@@ -78,6 +118,8 @@ export default {
     },
     components: {
         Datepicker,
+        ColorPicker,
+        CurrencyInput,
     },
     data () {
         return {
@@ -85,6 +127,55 @@ export default {
         }
     },
     computed: {
+        states () {
+            return [
+                'Johor',
+                'Kedah',
+                'Kelantan',
+                'Kuala Lumpur',
+                'Labuan',
+                'Melaka',
+                'Negeri Sembilan',
+                'Pahang',
+                'Perak',
+                'Perlis',
+                'Pulau Pinang',
+                'Putrajaya',
+                'Sabah',
+                'Sarawak',
+                'Selangor',
+                'Terengganu',
+            ]
+        },
+        countries () {
+            return [
+                'Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antigua & Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Ascension Island', 'Australia', 'Austria', 'Azerbaijan', 
+                'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia & Herzegovina', 'Botswana', 'Brazil', 'British Virgin Islands', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 
+                'Cambodia', 'Cameroon', 'Canada', 'Canary Islands', 'Cape Verde', 'Cayman Islands', 'Chad', 'Chile', 'China', 'Colombia', 'Congo', 'Cook Islands', 'Costa Rica', 'Cote D Ivoire', 'Croatia', 'Cruise Ship', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark',
+                'Djibouti', 'Dominica', 'Dominican Republic', 
+                'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Estonia', 'Ethiopia', 
+                'Falkland Islands', 'Faroe Islands', 'Fiji', 'Finland', 'France', 'French Polynesia', 'French West Indies',
+                'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea Bissau', 'Guyana', 'Haiti',
+                'Honduras', 'Hong Kong', 'Hungary',
+                'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy',
+                'Jamaica', 'Japan', 'Jersey', 'Jordan',
+                'Kazakhstan', 'Kenya', 'Kuwait', 'Kyrgyz Republic',
+                'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg',
+                'Macau', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Mauritania', 'Mauritius', 'Mexico', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar',
+                'Namibia', 'Nepal', 'Netherlands', 'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Norway',
+                'Oman',
+                'Pakistan', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Puerto Rico',
+                'Qatar',
+                'Reunion', 'Romania', 'Russia', 'Rwanda',
+                'Saint Pierre & Miquelon', 'Samoa', 'San Marino', 'Satellite', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'St Kitts & Nevis', 'St Lucia', 'St Vincent', 'St. Lucia', 'Sudan', 'Suriname', 'Swaziland', 'Sweden', 'Switzerland', 'Syria',
+                'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor L\'Este', 'Togo', 'Tonga', 'Trinidad & Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks & Caicos',
+                'U.S. Outlying Islands', 'U.S. Virgin Islands',
+                'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan',
+                'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam',
+                'Yemen',
+                'Zambia', 'Zimbabwe'
+            ]
+        },
         currencies () {
             return [
                 { value: 'USD', label: 'USD - US Dollar' },

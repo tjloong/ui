@@ -26,7 +26,7 @@
                 </div>
 
                 <template #buttons>
-                    <btn submit color="green-500" class="w-full" @click="submit()">
+                    <btn submit color="green" class="w-full" @click="submit()">
                         Apply
                     </btn>
                 </template>
@@ -36,17 +36,17 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 import { createPopper } from '@popperjs/core'
+
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 export default {
     name: 'DashboardDateRange',
     props: {
-        value: {
-            type: Object,
-            default () {
-                return {}
-            }
-        }
+        value: Object,
+        timestamp: Boolean,
     },
     data () {
         return {
@@ -82,7 +82,9 @@ export default {
             this.show = false
         },
         submit () {
-            const range = { from: this.from, to: this.to }
+            const from = this.from && this.timestamp ? dayjs(this.from).startOf('day').utc().format() : this.from
+            const to = this.to && this.timestamp ? dayjs(this.to).endOf('day').utc().format() : this.to
+            const range = { from, to }
 
             this.$emit('input', range)
 

@@ -30,7 +30,7 @@
                     @click="select(opt)"
                 >
                     <slot name="option" :option="opt">
-                        {{ opt.prototype.hasOwnProperty('name') ? opt.name : opt }}
+                        {{ opt.hasOwnProperty('name') ? opt.name : opt }}
                     </slot>
                 </a>
             </template>
@@ -111,8 +111,10 @@ export default {
             })
 
             this.form.post(this.url, {
+                preserveState: true,
+                preserveScroll: true,
                 onSuccess: () => {
-                    this.results = this.$page.props.options
+                    this.results = this.$page.props.session
                     this.options = this.page === 1
                         ? this.results.data
                         : this.options.concat(this.results.data)

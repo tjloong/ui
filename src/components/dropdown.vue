@@ -51,7 +51,7 @@ export default {
         },
         dismiss (e) {
             if (this.$el.contains(e.target)) return
-			this.show = false
+            this.show = false
         },
     }
 }

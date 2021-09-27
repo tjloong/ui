@@ -12,6 +12,52 @@ const icons = {
     'success': 'message-check',
 }
 
+const toast = (msg, type = 'info', duration = 2500, pos = 'bottom center') => {
+    const ypos = pos.split(' ')[0]
+    const xpos = pos.split(' ')[1]
+
+    if (ypos === 'top') pos = 'top-10'
+    if (ypos === 'center') pos = 'top-1/2 transform -translate-y-1/2'
+    if (ypos === 'bottom') pos = 'bottom-10'
+
+    if (xpos === 'left') pos = `${pos} left-10`
+    if (xpos === 'center') pos = `${pos} left-1/2 transform -translate-x-1/2`
+    if (xpos === 'right') pos = `${pos} right-10`
+
+    const borderColors = {
+        info: 'border-blue-500',
+        warning: 'border-yellow-500',
+        alert: 'border-red-500',
+        success: 'border-green-500',
+    }
+
+    const el = document.createElement('div')
+    el.innerHTML = `
+        <div class="fixed z-20 ${pos}">
+            <div class="max-w-md mx-auto bg-white rounded-md border shadow-lg p-1.5 animate-fade-in-up" style="min-width: 200px;">
+                <a class="float-right" id="close">
+                    <box-icon name="x" size="20px" color="dimgray"></box-icon>
+                </a>
+
+                <div class="flex px-5 py-2 border-l-4 ${borderColors[type]}">
+                    <box-icon name="${icons[type]}" color="${colors[type]}" class="flex-shrink-0 mr-2"></box-icon>
+                    <div class="flex-grow self-center font-medium">
+                        ${msg}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `
+
+    const dismiss = () => el.remove()
+
+    el.querySelector('#close').addEventListener('click', dismiss)
+
+    setTimeout(dismiss, duration);
+
+    document.body.appendChild(el)
+}
+
 export default {
     install (Vue) {
         /**
@@ -52,51 +98,7 @@ export default {
         /**
          * Toast
          */
-        Vue.prototype.$toast = (msg, type = 'info', duration = 2500, pos = 'bottom center') => {
-            const ypos = pos.split(' ')[0]
-            const xpos = pos.split(' ')[1]
-
-            if (ypos === 'top') pos = 'top-10'
-            if (ypos === 'center') pos = 'top-1/2 transform -translate-y-1/2'
-            if (ypos === 'bottom') pos = 'bottom-10'
-
-            if (xpos === 'left') pos = `${pos} left-10`
-            if (xpos === 'center') pos = `${pos} left-1/2 transform -translate-x-1/2`
-            if (xpos === 'right') pos = `${pos} right-10`
-
-            const borderColors = {
-                info: 'border-blue-500',
-                warning: 'border-yellow-500',
-                alert: 'border-red-500',
-                success: 'border-green-500',
-            }
-
-            const el = document.createElement('div')
-            el.innerHTML = `
-                <div class="fixed z-20 ${pos}">
-                    <div class="max-w-md mx-auto bg-white rounded-md border shadow-lg p-1.5 animate-fade-in-up" style="min-width: 200px;">
-                        <a class="float-right" id="close">
-                            <box-icon name="x" size="20px" color="dimgray"></box-icon>
-                        </a>
-
-                        <div class="flex px-5 py-2 border-l-4 ${borderColors[type]}">
-                            <box-icon name="${icons[type]}" color="${colors[type]}" class="flex-shrink-0 mr-2"></box-icon>
-                            <div class="flex-grow self-center font-medium">
-                                ${msg}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `
-
-            const dismiss = () => el.remove()
-
-            el.querySelector('#close').addEventListener('click', dismiss)
-
-            setTimeout(dismiss, duration);
-
-            document.body.appendChild(el)
-        }
+        Vue.prototype.$toast = toast
 
         /**
          * Confirmation prompt
@@ -146,6 +148,16 @@ export default {
             el.querySelector('#bg').addEventListener('click', () => el.remove())
 
             document.body.appendChild(el)
+        }
+
+        /**
+         * Handle page error
+         */
+        Vue.prototype.$error = (e) => {
+            const key = Object.keys(e)[0]
+
+            if (key) toast(e[key], 'alert')
+            else toast('There were some error while performing the operation', 'alert')
         }
     }
 };

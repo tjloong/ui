@@ -95,27 +95,32 @@
                             <th class="px-3" width="30" v-if="$listeners.checked">
                                 <checkbox @input="check($event ? 'all' : null)" />
                             </th>
-                            <th
-                                v-for="field in fields"
-                                :key="field.key"
-                                :class="getTableHeaderClass(field)"
-                            >
-                                <template v-if="field.sort">
-                                    <a class="hover:underline" @click="sort(field)">
-                                        <div class="flex items-center">
-                                            {{ getLabel(field) }}
-                                        
-                                            <icon name="down-arrow-alt" size="16px" v-if="orderBy === `${field.sort}__asc`" />
-                                            <icon name="up-arrow-alt" size="16px" v-if="orderBy === `${field.sort}__desc`" />
-                                        </div>
-                                    </a>
-                                </template>
+                            <th v-for="field in fields" :key="field.key">
+                                <a
+                                    v-if="field.sort"
+                                    :class="[
+                                        'flex items-center hover:underline',
+                                        field.align === 'right' && 'flex items-center justify-end',
+                                        field.align === 'center' && 'flex items-center justify-center',
+                                    ]"
+                                    @click="sort(field)"
+                                >
+                                    {{ getLabel(field) }}
+                                    
+                                    <icon v-if="orderBy === `${field.sort}__asc`" name="down-arrow-alt" size="16px" />
+                                    <icon v-if="orderBy === `${field.sort}__desc`" name="up-arrow-alt" size="16px" />
+                                </a>
 
-                                <template v-else>
-                                    <span class="text-gray-500">
-                                        {{ getLabel(field) }}
-                                    </span>
-                                </template>
+                                <div 
+                                    v-else
+                                    :class="[
+                                        'text-gray-500',
+                                        field.align === 'right' && 'text-right',
+                                        field.align === 'center' && 'text-center',
+                                    ]"
+                                >
+                                    {{ getLabel(field) }}
+                                </div>
                             </th>
                         </tr>
                     </thead>
@@ -132,11 +137,8 @@
                                     @input="check(i)"
                                 />
                             </td>
-                            <td
-                                v-for="field in fields"
-                                :key="field.key"
-                                :class="['align-top', getTableCellClass(field)]"
-                            >
+
+                            <td v-for="field in fields" :key="field.key" :class="['align-top', getTableCellClass(field)]">
                                 <template v-if="field.actions && getActions(field, row)">
                                     <template v-if="Array.isArray(getActions(field, row))">
                                         <dropdown>
@@ -204,18 +206,21 @@
 
                                 <template v-else-if="field.link && field.link(row)">
                                     <inertia-link 
+                                        v-if="getValue(field, row)"
                                         :href="field.link(row)" 
                                         class="font-medium text-blue-400 hover:text-blue-500"
                                     >
                                         {{ getValue(field, row) }}
                                     </inertia-link>
+
+                                    <span v-else>--</span>
                                 </template>
 
                                 <template v-else-if="field.click">
                                     <a 
+                                        v-if="getValue(field, row)"
                                         class="font-medium text-blue-400 hover:text-blue-500" 
                                         @click="field.click(row)"
-                                        v-if="getValue(field, row)"
                                     >
                                         {{ getValue(field, row) }}
                                     </a>
@@ -263,6 +268,7 @@ import startCase from 'lodash/startCase'
 export default {
     name: 'DataTable',
     props: {
+        extractUrl: [String, Boolean],
         data: {
             type: Array,
             default () {
@@ -292,10 +298,6 @@ export default {
             default () {
                 return []
             },
-        },
-        extractUrl: {
-            type: String,
-            default: null,
         },
     },
     components: {
@@ -430,7 +432,12 @@ export default {
                 title: 'Extract Data',
                 message: `This will export ${this.meta.total} ${this.$options.filters.pluralize(this.meta.total, 'record')}. Continue?`,
                 onConfirmed: () => {
-                    this.$inertia.visit(this.extractUrl, this.meta.filters)
+                    let filters = {}
+                    this.meta.filters.forEach(val => filters[val.column] = val.value)
+                    
+                    const qs = (new URLSearchParams(filters)).toString()
+
+                    window.location = `${this.extractUrl}?${qs}`
                 }
             })
         }

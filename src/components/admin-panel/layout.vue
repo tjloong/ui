@@ -11,7 +11,7 @@
         <div ref="navbar" class="fixed top-0 left-0 right-0 z-10 transition-all duration-75 lg:ml-56">
             <div class="w-full h-12 shadow bg-white pl-12 pr-4">
                 <div class="flex items-center">
-                    <div class="flex-grow">
+                    <div class="flex-grow flex items-center">
                         <slot name="navbar-left" />
                     </div>
 

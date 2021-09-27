@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "@popperjs/core": "^2.9.3",
+    "@simonwep/pickr": "^1.8.2",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",
     "boxicons": "^2.0.9",

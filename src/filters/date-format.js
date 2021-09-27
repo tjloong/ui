@@ -1,4 +1,7 @@
 const dayjs = require('dayjs')
+const relativeTime = require('dayjs/plugin/relativeTime')
+
+dayjs.extend(relativeTime)
 
 export default (value, option) => {
 	const date = dayjs(value, 'YYYY-MM-DD HH:mm:ss')

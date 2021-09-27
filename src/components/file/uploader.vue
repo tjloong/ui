@@ -141,7 +141,7 @@ export default {
                 this.form = this.$inertia.form({ upload: data })
                 this.form.post(this.url, {
                     onSuccess: () => {
-                        const result = this.$page.props.options
+                        const result = this.$page.props.session
                         this.$emit('completed', this.multiple ? result : result[0])
                         this.close()
                     },
